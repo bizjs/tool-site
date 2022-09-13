@@ -22,7 +22,6 @@
     "typecheck": "tsc -b && tsc -b cypress",
     "validate": "run-p \"test -- --run\" lint typecheck test:e2e:run"
   },
-  "prettier": {},
   "eslintIgnore": [
     "/node_modules",
     "/build",
@@ -34,6 +33,7 @@
     "@remix-run/react": "^1.7.0",
     "@remix-run/serve": "^1.7.0",
     "@remix-run/server-runtime": "^1.7.0",
+    "antd": "^4.23.1",
     "bcryptjs": "^2.4.3",
     "isbot": "^3.5.1",
     "react": "^18.2.0",
