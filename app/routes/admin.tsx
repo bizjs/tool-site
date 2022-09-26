@@ -1,10 +1,11 @@
 import { Outlet, useLoaderData } from '@remix-run/react';
-import { type LoaderArgs, type LinksFunction, json } from '@remix-run/server-runtime';
-import { Input, Layout } from 'antd';
-import styles from '../styles/admin.css';
+import { type LoaderArgs, type LinksFunction, json, redirect } from '@remix-run/server-runtime';
+import { Layout } from 'antd';
+import { css } from '@emotion/css';
+import { getUserId } from '~/session.server';
 
 export const links: LinksFunction = () => {
-  return [{ rel: 'stylesheet', href: styles }];
+  return [];
 };
 
 type LoaderData = {
@@ -12,30 +13,23 @@ type LoaderData = {
 };
 
 export async function loader({ request }: LoaderArgs) {
+  const userId = await getUserId(request);
+  if (!userId) {
+    return redirect('/');
+  }
   // const userId = await requireUserId(request);
   // const noteListItems = await getNoteListItems({ userId });
   return json({ tools: [1, 2, 3] } as LoaderData);
 }
 
-console.log(styles);
-
 export default () => {
   const loaderData = useLoaderData<LoaderData>();
   return (
     <Layout className="h-full">
-      <Layout.Sider width={64} theme="light" className="h-full left-sider">
-        <div className="logo">LOGO</div>
-      </Layout.Sider>
-      <Layout>
-        <Layout.Sider width={300} theme="light">
-          <div className="layout-search">
-            <Input.Search placeholder="搜索开发者工具" />
-          </div>
-          <div className="tool-list">
-            {loaderData.tools?.map((tool) => {
-              return <div className="tool-item">Hello</div>;
-            })}
-          </div>
+      <Layout.Header>Header</Layout.Header>
+      <Layout hasSider>
+        <Layout.Sider width={200} theme="light" className="h-full">
+          <div className="logo">LOGO</div>
         </Layout.Sider>
         <Layout.Content className="main-content">
           <Outlet />
@@ -43,4 +37,26 @@ export default () => {
       </Layout>
     </Layout>
   );
+};
+
+const styles = {
+  leftSider: css`
+    border-right: 1px solid #eee;
+  `,
+  layoutSearch: css`
+    padding: 16px 24px;
+    height: 64px;
+    border-bottom: 1px solid #eee;
+  `,
+  toolList: css`
+    height: calc(100vh - 64px);
+    overflow-y: auto;
+  `,
+  toolItem: css`
+    padding: 0 24px;
+    min-height: 100px;
+  `,
+  mainContent: css`
+    overflow-y: auto;
+  `,
 };

@@ -20,7 +20,7 @@ export async function loader({ request }: LoaderArgs) {
 export default () => {
   const loaderData = useLoaderData<LoaderData>();
   return (
-    <Layout className="h-full">
+    <Layout className="h-full" hasSider>
       <Layout.Sider width={64} theme="light" className={`h-full ${styles.leftSider}`}>
         <div className="logo">LOGO</div>
       </Layout.Sider>
